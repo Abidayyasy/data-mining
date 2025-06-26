@@ -32,6 +32,7 @@ st.success("Model berhasil dilatih dengan data training.")
 
 # Prediksi Probabilitas
 st.subheader("Prediksi Probabilitas Data Testing")
+y_proba_nb = nb.predict_proba(X_test_scaled)  # <<< INI HARUS SEBELUM DIPAKAI DI BAWAH
 proba_df = pd.DataFrame(y_proba_nb, columns=["Benign (0)", "Malignant (1)"])
 st.dataframe(proba_df.style.format("{:.2f}"), use_container_width=True)
 
@@ -54,6 +55,7 @@ st.pyplot(fig)
 
 # Prediksi Akhir
 st.subheader("Hasil Prediksi Akhir vs Data Aktual")
+y_pred_nb = nb.predict(X_test_scaled)
 hasil_df = pd.DataFrame({
     "Prediksi Akhir": y_pred_nb,
     "Data Aktual": y_test.values
