@@ -32,9 +32,8 @@ st.success("Model berhasil dilatih dengan data training.")
 
 # Prediksi Probabilitas
 st.subheader("Prediksi Probabilitas Data Testing")
-y_proba_nb = nb.predict_proba(X_test_scaled)
-st.write("Probabilitas prediksi (kolom pertama = Benign, kolom kedua = Malignant):")
-st.write(y_proba_nb)
+proba_df = pd.DataFrame(y_proba_nb, columns=["Benign (0)", "Malignant (1)"])
+st.dataframe(proba_df.style.format("{:.2f}"), use_container_width=True)
 
 # Visualisasi Probabilitas
 st.subheader("Visualisasi Probabilitas Prediksi")
@@ -54,10 +53,14 @@ ax.grid(axis='y', linestyle='--', alpha=0.7)
 st.pyplot(fig)
 
 # Prediksi Akhir
-st.subheader("Prediksi Akhir & Evaluasi")
-y_pred_nb = nb.predict(X_test_scaled)
-st.write("Hasil prediksi akhir:", y_pred_nb)
-st.write("Data aktual:", y_test.values)
+st.subheader("Hasil Prediksi Akhir vs Data Aktual")
+hasil_df = pd.DataFrame({
+    "Prediksi Akhir": y_pred_nb,
+    "Data Aktual": y_test.values
+})
+hasil_df["Prediksi Akhir"] = hasil_df["Prediksi Akhir"].replace({0: "Benign", 1: "Malignant"})
+hasil_df["Data Aktual"] = hasil_df["Data Aktual"].replace({0: "Benign", 1: "Malignant"})
+st.dataframe(hasil_df, use_container_width=True)
 
 # Confusion Matrix
 cm = confusion_matrix(y_test, y_pred_nb)
